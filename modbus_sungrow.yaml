@@ -10,7 +10,7 @@ modbus:
     type: tcp
     host: !secret sungrow_modbus_host_ip
     port: !secret sungrow_modbus_port
-    retries: 10
+   # retries: 10
     sensors:
       - name: Sungrow device type code
         unique_id: sg_dev_code
@@ -361,83 +361,83 @@ modbus:
         scan_interval: 10
 
       # https://www.photovoltaikforum.com/thread/166134-daten-lesen-vom-sungrow-wechselrichtern-modbus/?postID=3324464#post3324464
-      - name: Meter phase A voltage 
-        unique_id: sg_meter_phase_a_voltage
-        device_address: !secret sungrow_modbus_slave
-        address: 5740 # reg 5741
-        input_type: input
-        data_type: int16
-        precision: 1
-        unit_of_measurement: V
-        device_class: voltage
-        state_class: measurement
-        scale: 0.1
-        scan_interval: 10
+      # - name: Meter phase A voltage 
+      #   unique_id: sg_meter_phase_a_voltage
+      #   device_address: !secret sungrow_modbus_slave
+      #   address: 5740 # reg 5741
+      #   input_type: input
+      #   data_type: int16
+      #   precision: 1
+      #   unit_of_measurement: V
+      #   device_class: voltage
+      #   state_class: measurement
+      #   scale: 0.1
+      #   scan_interval: 10
 
-      - name: Meter phase B voltage
-        unique_id: sg_meter_phase_b_voltage
-        device_address: !secret sungrow_modbus_slave
-        address: 5741 # reg 5742
-        input_type: input
-        data_type: int16
-        precision: 1
-        unit_of_measurement: V
-        device_class: voltage
-        state_class: measurement
-        scale: 0.1
-        scan_interval: 10
+      # - name: Meter phase B voltage
+      #   unique_id: sg_meter_phase_b_voltage
+      #   device_address: !secret sungrow_modbus_slave
+      #   address: 5741 # reg 5742
+      #   input_type: input
+      #   data_type: int16
+      #   precision: 1
+      #   unit_of_measurement: V
+      #   device_class: voltage
+      #   state_class: measurement
+      #   scale: 0.1
+      #   scan_interval: 10
 
-      - name: Meter phase C voltage 
-        unique_id: sg_meter_phase_c_voltage
-        device_address: !secret sungrow_modbus_slave
-        address: 5742 # reg 5743
-        input_type: input
-        data_type: int16
-        precision: 1
-        unit_of_measurement: V
-        device_class: voltage
-        state_class: measurement
-        scale: 0.1
-        scan_interval: 10
+      # - name: Meter phase C voltage 
+      #   unique_id: sg_meter_phase_c_voltage
+      #   device_address: !secret sungrow_modbus_slave
+      #   address: 5742 # reg 5743
+      #   input_type: input
+      #   data_type: int16
+      #   precision: 1
+      #   unit_of_measurement: V
+      #   device_class: voltage
+      #   state_class: measurement
+      #   scale: 0.1
+      #   scan_interval: 10
 
-      - name: Meter phase A current 
-        unique_id: sg_meter_phase_a_current
-        device_address: !secret sungrow_modbus_slave
-        address: 5743 # reg 5744
-        input_type: input
-        data_type: uint16
-        precision: 0
-        unit_of_measurement: A
-        device_class: current
-        state_class: measurement
-        scale: 0.01
-        scan_interval: 10
+      # - name: Meter phase A current 
+      #   unique_id: sg_meter_phase_a_current
+      #   device_address: !secret sungrow_modbus_slave
+      #   address: 5743 # reg 5744
+      #   input_type: input
+      #   data_type: uint16
+      #   precision: 0
+      #   unit_of_measurement: A
+      #   device_class: current
+      #   state_class: measurement
+      #   scale: 0.01
+      #   scan_interval: 10
 
-      - name: Meter phase B current
-        unique_id: sg_meter_phase_b_current
-        device_address: !secret sungrow_modbus_slave
-        address: 5744 # reg 5745
-        input_type: input
-        data_type: uint16
-        precision: 0
-        unit_of_measurement: A
-        device_class: current
-        state_class: measurement
-        scale: 0.01
-        scan_interval: 10
+      # - name: Meter phase B current
+      #   unique_id: sg_meter_phase_b_current
+      #   device_address: !secret sungrow_modbus_slave
+      #   address: 5744 # reg 5745
+      #   input_type: input
+      #   data_type: uint16
+      #   precision: 0
+      #   unit_of_measurement: A
+      #   device_class: current
+      #   state_class: measurement
+      #   scale: 0.01
+      #   scan_interval: 10
 
-      - name: Meter phase C current 
-        unique_id: sg_meter_phase_c_current
-        device_address: !secret sungrow_modbus_slave
-        address: 5745 # reg 5746
-        input_type: input
-        data_type: uint16
-        precision: 0
-        unit_of_measurement: A
-        device_class: current
-        state_class: measurement
-        scale: 0.01
-        scan_interval: 10
+      # - name: Meter phase C current 
+      #   unique_id: sg_meter_phase_c_current
+      #   device_address: !secret sungrow_modbus_slave
+      #   address: 5745 # reg 5746
+      #   input_type: input
+      #   data_type: uint16
+      #   precision: 0
+      #   unit_of_measurement: A
+      #   device_class: current
+      #   state_class: measurement
+      #   scale: 0.01
+      #   scan_interval: 10
 
       # Start monthly PV generation
       # - name: Monthly PV generation (01 January)
@@ -1643,16 +1643,6 @@ modbus:
         state_class: measurement
         scan_interval: 10
 
-      - name: Global mpp scan manual raw
-        unique_id: sg_global_mpp_scan_manual_raw
-        device_address: !secret sungrow_modbus_slave
-        address: 30229 # reg 30230
-        input_type: holding
-        data_type: uint16
-        precision: 0
-        state_class: measurement
-        scan_interval: 10
-
 sensor:
   - platform: filter
     name: "Daily consumed energy (filtered)"
@@ -2545,13 +2535,6 @@ input_select:
       - "Disabled"
     icon: mdi:export
 
-  set_sg_global_mpp_scan_manual:
-    name: Global mpp scan manual
-    options:
-      - "Enabled"
-      - "Disabled"
-    icon: mdi:export
-
 # Automations: Write modbus registers on input changes via GUI
 # note: If you change a value by the sliders, it will take up to 60 seconds until the state variables are updated
 # Unfortunately, I could not find a way to "force update" modbus registers, yet...
@@ -3064,6 +3047,7 @@ automation:
       - condition: template
         value_template: "{{ not is_state('sensor.global_mpp_scan_manual_raw', 'unavailable') }}"
     action:
+      - service: input_select.select_option
         target:
           entity_id: input_select.set_sg_global_mpp_scan_manual
         data:
@@ -3087,6 +3071,7 @@ automation:
       export_limit_enable: 0xAA
       export_limit_disable: 0x55
     action:
+      - service: modbus.write_register
         data_template:
           hub: SungrowSHx
           slave: !secret sungrow_modbus_slave
@@ -3099,7 +3084,7 @@ automation:
             {% else %}
               {{export_limit_disable}}
             {% endif %}
-    mode: single
+    mode: single    
 
 
 # Usage: Use these scripts to simplify automations
