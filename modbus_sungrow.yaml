@@ -1,7 +1,7 @@
 # Home Assistant Sungrow inverter integration
 # https://github.com/mkaiser/Sungrow-SHx-Inverter-Modbus-Home-Assistant
 # by Martin Kaiser
-# last update: 2024-08-19
+# last update: 2024-10-01 (2)
 #
 # Note: This YAML file will only work with Home Assistant >= 2023.10
 
@@ -10,8 +10,29 @@ modbus:
     type: tcp
     host: !secret sungrow_modbus_host_ip
     port: !secret sungrow_modbus_port
-   # retries: 10
+    delay: 5
+    timeout: 10
+
     sensors:
+      - name: Sungrow inverter serial
+        unique_id: sg_inverter_serial
+        device_address: !secret sungrow_modbus_slave
+        address: 4989 # reg 4990
+        input_type: input
+        data_type: string
+        count: 10
+        scan_interval: 600
+
+      # for Sungrow batteries only
+      #      - name: Sungrow battery serial
+      #        unique_id: sg_battery_serial
+      #        device_address: !secret sbr_modbus_slave # Usually 200, only modbus-port, not via Winet-S
+      #        address: 10710 # reg 10711
+      #        input_type: input
+      #        data_type: string
+      #        count: 10
+      #        scan_interval: 86400
+
       - name: Sungrow device type code
         unique_id: sg_dev_code
         device_address: !secret sungrow_modbus_slave
@@ -1592,7 +1613,9 @@ modbus:
         scale: 10
         scan_interval: 10
 
-      #undocumented sensor (reverse engineered by some guys of photovoltaikforum.com and forum.iobroker.net )
+
+      # was reg 33048 before as an undocumented sensor (reverse engineered by some guys of photovoltaikforum.com and forum.iobroker.net )
+      # but now it is in sungrow's datasheet
       - name: Battery capacity
         unique_id: sg_battery_capacity
         device_address: !secret sungrow_modbus_slave
@@ -1670,7 +1693,7 @@ template:
           and not is_state('sensor.total_dc_power', 'unavailable') 
           }}
         state: >-
-          {% if states('sensor.running_state')|is_number %}
+          {% if states('sensor.running_state')|is_number and states('sensor.running_state')|float > 0 %}
             {# use available sensor running_state #}
             {{ states('sensor.running_state')|int |bitwise_and(0x1) }}
           {% else %} 
@@ -1709,7 +1732,7 @@ template:
             )
           }}
         state: >-
-          {% if states('sensor.running_state')|is_number %}
+          {% if states('sensor.running_state')|is_number and states('sensor.running_state')|float > 0 %}
             {# use available sensor running_state #}
             {% if states('sensor.running_state')|int|bitwise_and(0x2) > 0 %}
               on
@@ -1771,7 +1794,7 @@ template:
             )
           }}
         state: >-
-          {% if states('sensor.running_state')|is_number %}
+          {% if states('sensor.running_state')|is_number and states('sensor.running_state')|float > 0 %}
             {# use available sensor running_state #}
             {% if states('sensor.running_state')|int|bitwise_and(0x4) > 0 %}
               on
@@ -1827,7 +1850,7 @@ template:
           and not is_state('sensor.export_power_raw', 'unavailable') 
           }}
         state: >-
-          {% if states('sensor.running_state')|is_number %}
+          {% if states('sensor.running_state')|is_number and states('sensor.running_state')|float > 0 %}
             {# use available sensor running_state #}
             {{ states('sensor.running_state')|int|bitwise_and(0x10) > 0 }}
           {% else %} 
@@ -1860,7 +1883,7 @@ template:
           and not is_state('sensor.running_state', 'unavailable')
           }}
         state: >-
-          {% if states('sensor.running_state')|is_number %}
+          {% if states('sensor.running_state')|is_number and states('sensor.running_state')|float > 0 %}
             {# use available sensor running_state #}
             {{ states('sensor.running_state')|int|bitwise_and(0x20) > 0 }}
           {% else %} 
@@ -2036,9 +2059,9 @@ template:
             Restarting
           {% elif ((states('sensor.system_state') |int) == 0x4000) %}
             External EMS mode
-          {% elif ((states('sensor.system_state') |int) == in [0x55000,0x0100]) %}
+          {% elif ((states('sensor.system_state') |int) in [0x55000,0x0100]) %}
             Fault
-          {% elif ((states('sensor.system_state') |int) == in [0x8000,0x0001]) %}
+          {% elif ((states('sensor.system_state') |int) in [0x8000,0x0001]) %}
             Stop
           {% elif ((states('sensor.system_state') |int) == 0x8100) %}
             De-rating Running
@@ -2164,7 +2187,7 @@ template:
           {% endif %}
 
       - name: Export power limit mode
-        unique_id: export_power_limit_mode
+        unique_id: sg_export_power_limit_mode
         availability: "{{ not is_state('sensor.export_power_limit_mode_raw', 'unavailable') }}"
         # TODO: test state_class with enum
         # state_class: measurement
@@ -2407,7 +2430,7 @@ template:
               + states('sensor.daily_imported_energy')|float 
               - states('sensor.daily_battery_charge')|float 
               + states('sensor.daily_battery_discharge')|float
-            ) 
+            )
           }}
 
       - name: Total consumed energy
@@ -2431,7 +2454,7 @@ template:
               + states('sensor.total_imported_energy')|float 
               - states('sensor.total_battery_charge')|float 
               + states('sensor.total_battery_discharge')|float
-            )|int 
+            )
           }}
 
 # getting input for Min and Max SoC
@@ -2580,7 +2603,7 @@ automation:
           entity_id: input_select.set_sg_inverter_run_mode
         data:
           option: >
-            {% if is_state('sensor.sungrow_inverter_state', "Stop") %}
+            {% if is_state('sensor.sungrow_inverter_state', "Stop") or is_state('sensor.sungrow_inverter_state', "Shutdown") %}
               Shutdown
             {% else %}
               Enabled
@@ -3047,7 +3070,7 @@ automation:
       - condition: template
         value_template: "{{ not is_state('sensor.global_mpp_scan_manual_raw', 'unavailable') }}"
     action:
-      - service: input_select.select_option
+      - action: input_select.select_option
         target:
           entity_id: input_select.set_sg_global_mpp_scan_manual
         data:
@@ -3071,7 +3094,7 @@ automation:
       export_limit_enable: 0xAA
       export_limit_disable: 0x55
     action:
-      - service: modbus.write_register
+      - action: modbus.write_register
         data_template:
           hub: SungrowSHx
           slave: !secret sungrow_modbus_slave
@@ -3084,8 +3107,7 @@ automation:
             {% else %}
               {{export_limit_disable}}
             {% endif %}
-    mode: single    
-
+    mode: single
 
 # Usage: Use these scripts to simplify automations
 # Example (Adjust to your needs with appropriate trigger):
