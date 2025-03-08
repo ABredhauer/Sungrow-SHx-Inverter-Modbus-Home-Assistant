@@ -134,6 +134,58 @@ modbus:
         scale: 0.1
         scan_interval: 10
 
+      - name: MPPT3 voltage 2
+        unique_id: sg_mppt3_voltage_2
+        device_address: !secret sungrow_modbus_slave_inv2
+        address: 5014 # reg 5015
+        input_type: input
+        data_type: uint16
+        precision: 1
+        unit_of_measurement: V
+        device_class: Voltage
+        state_class: measurement
+        scale: 0.1
+        scan_interval: 10
+
+      - name: MPPT3 current 2
+        unique_id: sg_mppt3_current_2
+        device_address: !secret sungrow_modbus_slave_inv2
+        address: 5015 # reg 5016
+        input_type: input
+        data_type: uint16
+        precision: 2
+        unit_of_measurement: A
+        device_class: Current
+        state_class: measurement
+        scale: 0.1
+        scan_interval: 10
+
+      - name: MPPT4 voltage 2
+        unique_id: sg_mppt4_voltage_2
+        device_address: !secret sungrow_modbus_slave_inv2
+        address: 5114 # reg 5115
+        input_type: input
+        data_type: uint16
+        precision: 1
+        unit_of_measurement: V
+        device_class: Voltage
+        state_class: measurement
+        scale: 0.1
+        scan_interval: 10
+
+      - name: MPPT4 current 2
+        unique_id: sg_mppt4_current_2
+        device_address: !secret sungrow_modbus_slave_inv2
+        address: 5115 # reg 5116
+        input_type: input
+        data_type: uint16
+        precision: 2
+        unit_of_measurement: A
+        device_class: Current
+        state_class: measurement
+        scale: 0.1
+        scan_interval: 10
+
       - name: Total DC power 2
         unique_id: sg_total_dc_power_2
         device_address: !secret sungrow_modbus_slave_inv2
@@ -1641,20 +1693,6 @@ modbus:
         scan_interval: 10
 
 
-      # was reg 33048 before as an undocumented sensor (reverse engineered by some guys of photovoltaikforum.com and forum.iobroker.net )
-      # but now it is in sungrow's datasheet
-      - name: Battery capacity 2
-        unique_id: sg_battery_capacity_2
-        device_address: !secret sungrow_modbus_slave_inv2
-        address: 13038 # reg 13039 
-        input_type: input
-        data_type: uint16
-        precision: 1
-        unit_of_measurement: kWh
-        device_class: energy_storage
-        scale: 0.01
-        scan_interval: 600
-
       #undocumented sensor (reverse engineered by some guys of photovoltaikforum.com and forum.iobroker.net )
       - name: Battery charging start power 2
         unique_id: sg_battery_charging_start_power_2
@@ -1960,6 +1998,30 @@ template:
           and not is_state('sensor.mppt2_current_2', 'unavailable' ) 
           }}
         state: "{{ (states('sensor.mppt2_voltage_2') | float * states('sensor.mppt2_current_2') | float) |int }}"
+
+      - name: MPPT3 power 2
+        unique_id: sg_mppt3_power_2
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        availability: >-
+          {{ 
+          not is_state('sensor.mppt3_voltage', 'unavailable') 
+          and not is_state('sensor.mppt3_current', 'unavailable' ) 
+          }}
+        state: "{{ (states('sensor.mppt3_voltage') | float * states('sensor.mppt3_current') | float) |int }}"
+
+      - name: MPPT4 power 2
+        unique_id: sg_mppt4_power_2
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        availability: >-
+          {{ 
+          not is_state('sensor.mppt4_voltage', 'unavailable') 
+          and not is_state('sensor.mppt4_current', 'unavailable' ) 
+          }}
+        state: "{{ (states('sensor.mppt4_voltage') | float * states('sensor.mppt4_current') | float) |int }}"
 
       - name: Phase A power 2
         unique_id: sg_phase_a_power_2
