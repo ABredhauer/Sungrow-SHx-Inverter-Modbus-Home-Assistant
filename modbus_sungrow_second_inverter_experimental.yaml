@@ -2,7 +2,7 @@
 # https://github.com/mkaiser/Sungrow-SHx-Inverter-Modbus-Home-Assistant
 # by Martin Kaiser
 #
-# last update: 2025-07-14
+# last update: 2025-07-14 merged to local 2025-08-30
 #
 # Note: This YAML file will only work with Home Assistant >= 2024.10
 #
@@ -162,6 +162,58 @@ modbus:
       #   state_class: measurement
       #   scale: 0.1
       #   scan_interval: 10        
+
+      - name: MPPT3 voltage 2
+        unique_id: sg_mppt3_voltage_2
+        device_address: !secret sungrow_modbus_slave_inv2
+        address: 5014 # reg 5015
+        input_type: input
+        data_type: uint16
+        precision: 1
+        unit_of_measurement: V
+        device_class: Voltage
+        state_class: measurement
+        scale: 0.1
+        scan_interval: 10
+
+      - name: MPPT3 current 2
+        unique_id: sg_mppt3_current_2
+        device_address: !secret sungrow_modbus_slave_inv2
+        address: 5015 # reg 5016
+        input_type: input
+        data_type: uint16
+        precision: 1
+        unit_of_measurement: A
+        device_class: Current
+        state_class: measurement
+        scale: 0.1
+        scan_interval: 10
+
+      - name: MPPT4 voltage 2
+        unique_id: sg_mppt4_voltage_2
+        device_address: !secret sungrow_modbus_slave_inv2
+        address: 5114 # reg 5115
+        input_type: input
+        data_type: uint16
+        precision: 1
+        unit_of_measurement: V
+        device_class: Voltage
+        state_class: measurement
+        scale: 0.1
+        scan_interval: 10
+
+      - name: MPPT4 current 2
+        unique_id: sg_mppt4_current_2
+        device_address: !secret sungrow_modbus_slave_inv2
+        address: 5115 # reg 5116
+        input_type: input
+        data_type: uint16
+        precision: 1
+        unit_of_measurement: A
+        device_class: Current
+        state_class: measurement
+        scale: 0.1
+        scan_interval: 10
 
       - name: Total DC power 2
         unique_id: sg_total_dc_power_2
@@ -426,83 +478,83 @@ modbus:
 
 
       # https://www.photovoltaikforum.com/thread/166134-daten-lesen-vom-sungrow-wechselrichtern-modbus/?postID=3324464#post3324464
-      - name: Meter phase A voltage 2
-        unique_id: sg_meter_phase_a_voltage_2
-        device_address: !secret sungrow_modbus_slave_inv2
-        address: 5740 # reg 5741
-        input_type: input
-        data_type: int16
-        precision: 1
-        unit_of_measurement: V
-        device_class: voltage
-        state_class: measurement
-        scale: 0.1
-        scan_interval: 10
+      # - name: Meter phase A voltage 
+      #   unique_id: sg_meter_phase_a_voltage_2
+      #   device_address: !secret sungrow_modbus_slave_inv2
+      #   address: 5740 # reg 5741
+      #   input_type: input
+      #   data_type: int16
+      #   precision: 1
+      #   unit_of_measurement: V
+      #   device_class: voltage
+      #   state_class: measurement
+      #   scale: 0.1
+      #   scan_interval: 10
 
-      - name: Meter phase B voltage 2
-        unique_id: sg_meter_phase_b_voltage_2
-        device_address: !secret sungrow_modbus_slave_inv2
-        address: 5741 # reg 5742
-        input_type: input
-        data_type: int16
-        precision: 1
-        unit_of_measurement: V
-        device_class: voltage
-        state_class: measurement
-        scale: 0.1
-        scan_interval: 10
+      # - name: Meter phase B voltage
+      #   unique_id: sg_meter_phase_b_voltage_2
+      #   device_address: !secret sungrow_modbus_slave_inv2
+      #   address: 5741 # reg 5742
+      #   input_type: input
+      #   data_type: int16
+      #   precision: 1
+      #   unit_of_measurement: V
+      #   device_class: voltage
+      #   state_class: measurement
+      #   scale: 0.1
+      #   scan_interval: 10
 
-      - name: Meter phase C voltage 2
-        unique_id: sg_meter_phase_c_voltage_2
-        device_address: !secret sungrow_modbus_slave_inv2
-        address: 5742 # reg 5743
-        input_type: input
-        data_type: int16
-        precision: 1
-        unit_of_measurement: V
-        device_class: voltage
-        state_class: measurement
-        scale: 0.1
-        scan_interval: 10
+      # - name: Meter phase C voltage 
+      #   unique_id: sg_meter_phase_c_voltage_2
+      #   device_address: !secret sungrow_modbus_slave_inv2
+      #   address: 5742 # reg 5743
+      #   input_type: input
+      #   data_type: int16
+      #   precision: 1
+      #   unit_of_measurement: V
+      #   device_class: voltage
+      #   state_class: measurement
+      #   scale: 0.1
+      #   scan_interval: 10
 
-      - name: Meter phase A current 2
-        unique_id: sg_meter_phase_a_current_2
-        device_address: !secret sungrow_modbus_slave_inv2
-        address: 5743 # reg 5744
-        input_type: input
-        data_type: uint16
-        precision: 2
-        unit_of_measurement: A
-        device_class: current
-        state_class: measurement
-        scale: 0.01
-        scan_interval: 10
+      # - name: Meter phase A current 
+      #   unique_id: sg_meter_phase_a_current_2
+      #   device_address: !secret sungrow_modbus_slave_inv2
+      #   address: 5743 # reg 5744
+      #   input_type: input
+      #   data_type: uint16
+      #   precision: 0
+      #   unit_of_measurement: A
+      #   device_class: current
+      #   state_class: measurement
+      #   scale: 0.01
+      #   scan_interval: 10
 
-      - name: Meter phase B current 2
-        unique_id: sg_meter_phase_b_current_2
-        device_address: !secret sungrow_modbus_slave_inv2
-        address: 5744 # reg 5745
-        input_type: input
-        data_type: uint16
-        precision: 2
-        unit_of_measurement: A
-        device_class: current
-        state_class: measurement
-        scale: 0.01
-        scan_interval: 10
+      # - name: Meter phase B current
+      #   unique_id: sg_meter_phase_b_current_2
+      #   device_address: !secret sungrow_modbus_slave_inv2
+      #   address: 5744 # reg 5745
+      #   input_type: input
+      #   data_type: uint16
+      #   precision: 0
+      #   unit_of_measurement: A
+      #   device_class: current
+      #   state_class: measurement
+      #   scale: 0.01
+      #   scan_interval: 10
 
-      - name: Meter phase C current 2
-        unique_id: sg_meter_phase_c_current_2
-        device_address: !secret sungrow_modbus_slave_inv2
-        address: 5745 # reg 5746
-        input_type: input
-        data_type: uint16
-        precision: 2
-        unit_of_measurement: A
-        device_class: current
-        state_class: measurement
-        scale: 0.01
-        scan_interval: 10
+      # - name: Meter phase C current 
+      #   unique_id: sg_meter_phase_c_current_2
+      #   device_address: !secret sungrow_modbus_slave_inv2
+      #   address: 5745 # reg 5746
+      #   input_type: input
+      #   data_type: uint16
+      #   precision: 0
+      #   unit_of_measurement: A
+      #   device_class: current
+      #   state_class: measurement
+      #   scale: 0.01
+      #   scan_interval: 10
 
 
       # following statistic sensors only work on some SH*RT inverters
@@ -1329,17 +1381,14 @@ modbus:
         scale: 0.1
         scan_interval: 10
 
-      # old firmware ( before october 2024): always positive battery power
+      # always positive battery power
       # use binary_sensor.battery_charging_2 | discharging to retrieve the direction of the energy flow
-      # new firmware: positive if charging and negative if discharging
-      # with new firmware installed we could use this raw value directly as signed battery power
-      # to support both firmwares we use the template sensor "signed battery power"
       - name: Battery power raw 2
         unique_id: sg_battery_power_raw_2
         device_address: !secret sungrow_modbus_slave_inv2
         address: 13021 # reg 13022
         input_type: input
-        data_type: int16 #updated to signed int, see issue #406
+        data_type: uint16
         precision: 0
         unit_of_measurement: W
         device_class: power
@@ -1992,18 +2041,29 @@ template:
           }}
         state: "{{ (states('sensor.mppt2_voltage_2') | float * states('sensor.mppt2_current_2') | float) |int }}"
 
-      # only for SH*T inverters with 3 MPPTs
-      # - name: MPPT3 power
-      #   unique_id: sg_mppt3_power_2
-      #   unit_of_measurement: W
-      #   device_class: power
-      #   state_class: measurement
-      #   availability: >-
-      #     {{ 
-      #     not is_state('sensor.mppt3_voltage', 'unavailable') 
-      #     and not is_state('sensor.mppt3_current', 'unavailable' ) 
-      #     }}
-      #   state: "{{ (states('sensor.mppt3_voltage') | float * states('sensor.mppt3_current') | float) |int }}"
+      - name: MPPT3 power 2
+        unique_id: sg_mppt3_power_2
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        availability: >-
+          {{ 
+          not is_state('sensor.mppt3_voltage', 'unavailable') 
+          and not is_state('sensor.mppt3_current', 'unavailable' ) 
+          }}
+        state: "{{ (states('sensor.mppt3_voltage') | float * states('sensor.mppt3_current') | float) |int }}"
+
+      - name: MPPT4 power 2
+        unique_id: sg_mppt4_power_2
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        availability: >-
+          {{ 
+          not is_state('sensor.mppt4_voltage', 'unavailable') 
+          and not is_state('sensor.mppt4_current', 'unavailable' ) 
+          }}
+        state: "{{ (states('sensor.mppt4_voltage') | float * states('sensor.mppt4_current') | float) |int }}"
 
       - name: Phase A power 2
         unique_id: sg_phase_a_power_2
@@ -2639,19 +2699,19 @@ input_number:
   set_sg_2_forced_charge_discharge_power:
     name: Forced charge discharge power (W)
     min: 0
-    max: 5000 # change this value according to the capability of your battery
+    max: 10600 # change this value according to the capability of your battery
     step: 100
 
   set_sg_2_battery_max_charge_power:
     name: Max battery charge power (W)
     min: 100
-    max: 5000 # change this value according to the capability of your battery
+    max: 10600 # change this value according to the capability of your battery
     step: 100
 
   set_sg_2_battery_max_discharge_power:
     name: Max battery discharge power (W)
     min: 10
-    max: 5000 # change this value according to the capability of your battery
+    max: 10600 # change this value according to the capability of your battery
     step: 100
 
   # This threshold is compared against the currently achievable charging power, not just against the currently available surplus.
@@ -2673,9 +2733,9 @@ input_number:
   # TODO: adjust to the capabilities of your inverter
   # e.g., 25000 for SH25T
   set_sg_2_export_power_limit:
-    name: Export power limit (W)
+    name: Set export power limit
     min: 0
-    max: 10000
+    max: 10500
     # NOTE: datasheet states 10,500 W export limit for SH10.RT. But setting 10 5000 results in a modbus error
     # therefore limiting to 10 000 here.
     # TODO Note: It would be nice to have this as a global variable /secret
