@@ -1683,6 +1683,15 @@ modbus:
         state_class: measurement
         scan_interval: 10
 
+      - name: External EMS Heartbeat 2
+        unique_id: sg_external_ems_heartbeat_2
+        device_address: !secret sungrow_modbus_slave_inv2
+        address: 13079 # reg 13080
+        input_type: holding
+        data_type: uint16
+        state_class: measurement
+        scan_interval: 10
+
       # called "Feed-in limitation" in spec
       # reg 13087 U16 0xAA: Enable 0x55: Disable
       - name: Export power limit mode raw 2
